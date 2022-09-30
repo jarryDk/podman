@@ -1,0 +1,9 @@
+- name: "Podman network"
+  block:
+
+    - name: "Create a podman network named {{ podman_network_name }}"
+      containers.podman.podman_network:
+        name: "{{ podman_network_name }}"
+
+  become: true
+  become_user: root

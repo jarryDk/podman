@@ -1,0 +1,22 @@
+---
+- name: Run Postgress specific tasks
+  hosts: all
+  gather_facts: no
+
+  vars:
+    # Password for foo is SuperSecretPassword1234
+    foo: !vault |
+      $ANSIBLE_VAULT;1.1;AES256
+      38663663656366303332653264313332653131613535373365323738336664346438383963313962
+      6366666161626631393464353162323365366439393436390a623536613535373734393865633261
+      32666163616666303164633665383137343436373234626263663665663938343263393061613537
+      6364633737613764300a313666396165316463346665663536393337363665616233653339343333
+      6336
+
+  tasks:
+    - name: "Debug - boo (grop_vars)"
+      debug:
+        msg: "Expeted : 'database_password' - Actual : '{{ boo }}'"
+    - name: "Debug - foo (vars)"
+      debug:
+        msg: "Expeted : 'database_user' - Actual : '{{ foo }}'"

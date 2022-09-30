@@ -1,0 +1,7 @@
+#!/bin/bash
+
+if [ -n $MY_VAULT_PASSWORD ]; then
+    echo "$MY_VAULT_PASSWORD"
+else
+    echo "no_password_set"
+fi

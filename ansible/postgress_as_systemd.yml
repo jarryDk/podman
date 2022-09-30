@@ -1,0 +1,12 @@
+---
+- name: Run Postgress specific tasks
+  hosts: all
+  gather_facts: no
+
+  tasks:
+    - name: "Run Podman specific tasks"
+      include_role:
+        name: podman
+    - name: "Run Postgres specific tasks"
+      include_role:
+        name: postgres

@@ -1,0 +1,32 @@
+---
+- name: "Set service_name fact"
+  set_fact:
+    service_name: "{{ postgres_service_name }}"
+
+- name: "Create user / dir for {{ service_name }}"
+  import_tasks: create_user.yml
+
+- name: Podman tasks for {{ service_name }} container
+  block:
+    - name: "Pull the the images for {{ service_name }}"
+      containers.podman.podman_image:
+        name: "docker.io/library/postgres:{{ postgresql_version }}"
+
+    - name: Configure {{ service_name }} container
+      containers.podman.podman_container:
+        name: "{{ service_name }}"
+        image: "docker.io/library/postgres:{{ postgresql_version }}"
+        state: present
+        network: "{{ podman_network_name }}"
+        ports: "5432:5432"
+        volumes:
+          - "/data/{{ service_name }}:/var/lib/postgresql/data"
+        env:
+          POSTGRES_DB: "{{ postgres_database }}"
+          POSTGRES_USER: "{{ postgres_database_username }}"
+          POSTGRES_PASSWORD: "{{ postgres_database_password }}"
+  become: true
+  become_user: root
+
+- name: "Install systemd service for {{ service_name }}"
+  import_tasks: install_service.yml

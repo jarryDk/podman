@@ -1,0 +1,95 @@
+= A collection af Podman stuff
+
+.Spin up an container
+[source,bash]
+----
+podman run -it \
+    --rm=true \
+    --name httpd-app \
+    -p 8080:80 httpd:2.4
+----
+
+.Create an images using a Dockerfile
+[source,bash]
+----
+cd images/httpd
+podman build -f Dockerfile.httpd -t my-httpd .
+----
+
+.Spin up an container based on my-httpd
+[source,bash]
+----
+podman run -it \
+    --rm=true \
+    --name my-httpd-app \
+    -p 8080:80 my-httpd
+----
+
+.Go into a container
+[source,bash]
+----
+podman exec -it <ID|TAG> bash
+----
+
+.Get resources being used by containers
+[source,bash]
+----
+podman stats
+----
+
+.Remove all images
+[source,bash]
+----
+podman rmi -a
+----
+
+.Remove all containers
+[source,bash]
+----
+podman rm -a (--force)
+----
+
+.Remove all pods
+[source,bash]
+----
+podman pod rm -a (--force)
+----
+
+.Remove all network
+[source,bash]
+----
+podman network rm -a (--force)
+----
+
+.List of networks and containers (simple)
+[source,bash]
+----
+podman ps --all --format "{{.Networks}}\t{{.Names}}"
+----
+
+.List of networks and containers (not as simple)
+[source,bash]
+----
+dnf install jq
+podman ps --format json | jq '[ .[] | { name: .Names[0], network: .Networks[0] } ]'
+----
+
+
+== Links
+
+- https://www.redhat.com/sysadmin/container-information-podman[How to use Podman to get information about your containers]
+- https://www.redhat.com/sysadmin/podman-new-network-stack[Podman 4.0's new network stack: What you need to know | Enable Sysadmin]
+- https://www.redhat.com/sysadmin/container-networking-podman[Configuring container networking with Podman | Enable Sysadmin]
+- https://www.redhat.com/sysadmin/rootless-podman-makes-sense[Running rootless Podman as a non-root user | Enable Sysadmin]
+- https://www.redhat.com/sysadmin/behind-scenes-podman[What happens behind the scenes of a rootless Podman container? | Enable Sysadmin]
+- https://www.redhat.com/sysadmin/podman-run-pods-systemd-services[How to run pods as systemd services with Podman]
+- https://blog.while-true-do.io/podman-networking-1/[Podman - Networking 1/3]
+- https://blog.while-true-do.io/podman-networking-2/[Podman - Networking 2/3]
+- https://blog.while-true-do.io/podman-networking-3/[Podman - Networking 3/3]
+
+
+.Ansible
+- https://docs.ansible.com/ansible/latest/collections/containers/podman/podman_container_module.html[containers.podman.podman_container module – Manage podman containers — Ansible Documentation]
+- https://docs.ansible.com/ansible/latest/collections/containers/podman/podman_image_module.html[containers.podman.podman_image module – Pull images for use by podman — Ansible Documentation]
+- https://docs.ansible.com/ansible/latest/collections/containers/podman/podman_network_module.html[containers.podman.podman_network module – Manage podman networks — Ansible Documentation]
+- https://docs.ansible.com/ansible/latest/collections/community/general/sefcontext_module.html[community.general.sefcontext module – Manages SELinux file context mapping definitions — Ansible Documentation]

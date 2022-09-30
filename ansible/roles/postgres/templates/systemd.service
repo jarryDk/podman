@@ -1,0 +1,14 @@
+[Unit]
+Description={{ service_name }} Podman Container
+StartLimitInterval=5
+StartLimitBurst=2
+
+[Service]
+Type=idle
+Restart=on-failure
+ExecStart=/usr/bin/podman start -a {{ service_name }}
+ExecStop=/usr/bin/podman stop -t 10 {{ service_name }}
+
+[Install]
+WantedBy=multi-user.target
+

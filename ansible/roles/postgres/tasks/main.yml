@@ -1,0 +1,15 @@
+---
+- name: "Install packages"
+  block:
+    - name: "Install podman and postgresql if needed"
+      ansible.builtin.dnf:
+        pkg:
+          - podman
+          - podman-plugins
+          - postgresql
+        state: latest
+  become: true
+  become_user: root
+
+# PostgreSQL tasks
+- import_tasks: "postgres.yml"

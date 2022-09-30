@@ -1,0 +1,14 @@
+---
+- name: "Podman network"
+  block:
+    - name: "Install podman if needed"
+      ansible.builtin.dnf:
+        pkg:
+          - podman
+          - podman-plugins
+        state: latest
+  become: true
+  become_user: root
+
+# Network tasks
+- import_tasks: "network.yml"

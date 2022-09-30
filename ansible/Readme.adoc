@@ -1,0 +1,43 @@
+= Ansible for Podman
+
+.Start postgres as an podman / systemd service (easy)
+[source,bash]
+----
+./postgress_as_systemd.sh
+----
+
+.Start postgres as an podman / systemd service (nomal)
+[source,bash]
+----
+ansible-playbook postgress_as_systemd.yml -K
+----
+
+
+== Vault
+
+In this setup the password for vault is set as the environment variables `MY_VAULT_PASSWORD` and picked up by the file `.vault_pass`. The file `ansible.cfg` have this line 
+----
+vault_password_file = ./.vault_pass
+----
+
+.Set the environment variables `MY_VAULT_PASSWORD`
+[source,bash]
+----
+export MY_VAULT_PASSWORD=SuperSecretPassword1234
+----
+NOTE: The export line wil show up in histroy (.bash_history) 
+
+.Create new secret
+[source,bash]
+----
+ansible-vault encrypt_string 'database_password' --name 'boo'
+----
+
+
+== Links
+
+- https://docs.ansible.com/ansible/latest/collections/containers/podman/podman_container_module.html[containers.podman.podman_container module – Manage podman containers — Ansible Documentation]
+- https://docs.ansible.com/ansible/latest/collections/containers/podman/podman_image_module.html[containers.podman.podman_image module – Pull images for use by podman — Ansible Documentation]
+- https://docs.ansible.com/ansible/latest/collections/containers/podman/podman_network_module.html[containers.podman.podman_network module – Manage podman networks — Ansible Documentation]
+- https://docs.ansible.com/ansible/latest/collections/community/general/sefcontext_module.html[community.general.sefcontext module – Manages SELinux file context mapping definitions — Ansible Documentation]
+- https://docs.ansible.com/ansible/2.8/user_guide/playbooks_vault.html[Using Vault in playbooks]
